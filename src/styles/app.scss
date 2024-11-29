@@ -1,0 +1,20 @@
+.app {
+  font-family: Montserrat;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 16px;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+  }
+}
