@@ -17,13 +17,29 @@ class TaskStore {
   toggleTaskCompletion(task: Task, isCompleted: boolean) {
     task.isCompleted = isCompleted;
     task.subTasks.forEach((subTask) => this.toggleTaskCompletion(subTask, isCompleted));
+    this.updateParentCompletion(task);
   }
 
   updateParentCompletion(task: Task) {
-    if (task.subTasks.length > 0) {
-      const allCompleted = task.subTasks.every((subTask) => subTask.isCompleted);
-      task.isCompleted = allCompleted;
+    const parentTask = this.findParentTask(this.tasks, task);
+    if (parentTask) {
+      const allCompleted = parentTask.subTasks.every((subTask) => subTask.isCompleted);
+      parentTask.isCompleted = allCompleted;
+      this.updateParentCompletion(parentTask);
     }
+  }
+
+  findParentTask(tasks: Task[], targetTask: Task): Task | null {
+    for (const task of tasks) {
+      if (task.subTasks.includes(targetTask)) {
+        return task;
+      }
+      const parent = this.findParentTask(task.subTasks, targetTask);
+      if (parent) {
+        return parent;
+      }
+    }
+    return null;
   }
 
   addTask(task: Task) {
